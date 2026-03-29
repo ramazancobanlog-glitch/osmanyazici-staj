@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --primary: #3b82f6;
+  --secondary: #1e293b;
+  --accent: #60a5fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+.premium-card {
+  @apply bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl transition-all duration-300;
+}
+
+.premium-card:hover {
+  @apply border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.2)];
+}
+
+.glass-nav {
+  @apply sticky top-0 z-50 bg-black/50 backdrop-blur-lg border-b border-white/10;
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+}
+
+.timeline-line {
+  @apply absolute left-1/2 -translate-x-1/2 w-1 h-full bg-slate-800;
+}
+
+.timeline-dot {
+  @apply absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)];
+}
