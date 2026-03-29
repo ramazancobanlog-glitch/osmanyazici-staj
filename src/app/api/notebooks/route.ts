@@ -2,12 +2,15 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Notebook from "@/models/Notebook";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     await dbConnect();
     const notebooks = await Notebook.find({}).sort({ historyYear: 1 });
     return NextResponse.json(notebooks);
   } catch (error) {
+    console.error("GET /api/notebooks ERROR:", error);
     return NextResponse.json({ error: "Failed to fetch notebooks" }, { status: 500 });
   }
 }

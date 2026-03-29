@@ -31,14 +31,16 @@ export default function AdminDashboard() {
       if (activeTab === "notebooks") {
         const res = await fetch("/api/notebooks");
         const data = await res.json();
-        setNotebooks(data);
+        setNotebooks(Array.isArray(data) ? data : []);
       } else {
         const res = await fetch("/api/admin/messages");
         const data = await res.json();
-        setMessages(data);
+        setMessages(Array.isArray(data) ? data : []);
       }
     } catch (err) {
       console.error(err);
+      if (activeTab === "notebooks") setNotebooks([]);
+      else setMessages([]);
     } finally {
       setLoading(false);
     }

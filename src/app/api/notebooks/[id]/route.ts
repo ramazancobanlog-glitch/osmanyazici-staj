@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Notebook from "@/models/Notebook";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(_req: NextRequest, ctx: RouteContext<"/api/notebooks/[id]">) {
   try {
     const { id } = await ctx.params;
