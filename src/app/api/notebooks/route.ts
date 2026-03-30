@@ -17,11 +17,32 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    await dbConnect();
+    console.log("POST /api/notebooks: Received request");
+
+    // Parse and validate the request body
     const body = await req.json();
-    const notebook = await Notebook.create(body);
+    console.log("POST /api/notebooks: Request body:", body);
+
+    const { title, content } = body;
+    if (!title || !content) {
+      console.error("POST /api/notebooks: Validation error - Missing title or content");
+      return NextResponse.json({ error: "Title and content are required." }, { status: 400 });
+    }
+
+    // Connect to the database
+    console.log("POST /api/notebooks: Connecting to database...");
+    await dbConnect();
+
+    // Create the notebook
+    const notebook = await Notebook.create({ title, content });
+    console.log("POST /api/notebooks: Notebook created:", notebook);
+
     return NextResponse.json(notebook, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to create notebook" }, { status: 500 });
+    console.error("POST /api/notebooks: Error:", error);
+
+    // Cast error to Error type to access the message property
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to create notebook", details: errorMessage }, { status: 500 });
   }
 }
