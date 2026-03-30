@@ -73,7 +73,8 @@ export default function CreateNotebook() {
       if (res.ok) {
         router.push("/admin/dashboard");
       } else {
-        alert("Kayıt oluşturulamadı!");
+        const errData = await res.json().catch(() => ({}));
+        alert(`Kayıt oluşturulamadı! Hata: ${errData.error || errData.message || res.statusText}`);
       }
     } catch (err) {
       alert("Bir hata oluştu.");
