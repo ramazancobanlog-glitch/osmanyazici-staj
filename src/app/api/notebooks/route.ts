@@ -34,21 +34,13 @@ export async function POST(req: Request) {
     await dbConnect();
 
     // Create the notebook
-    const notebook = await Notebook.create({ title, content });
+    const notebook = await Notebook.create(body);
     console.log("POST /api/notebooks: Notebook created:", notebook);
 
     return NextResponse.json(notebook, { status: 201 });
-<<<<<<< Updated upstream
-  } catch (error) {
-    console.error("POST /api/notebooks: Error:", error);
-
-    // Cast error to Error type to access the message property
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: "Failed to create notebook", details: errorMessage }, { status: 500 });
-=======
   } catch (error: any) {
     console.error("POST /api/notebooks ERROR:", error);
-    return NextResponse.json({ error: error.message || "Failed to create notebook" }, { status: 500 });
->>>>>>> Stashed changes
+    const errorMessage = error instanceof Error ? error.message : error?.message || "Unknown error";
+    return NextResponse.json({ error: "Failed to create notebook", details: errorMessage }, { status: 500 });
   }
 }
