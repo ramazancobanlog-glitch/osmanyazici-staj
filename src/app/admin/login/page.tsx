@@ -73,7 +73,7 @@ export default function AdminLogin() {
         </form>
 
         <p className="text-center mt-8 text-xs text-slate-600 italic">
-          Ş şifre: osman123 (Test Amaçlı)
+          Şifre: osman123 (Test Amaçlı)
         </p>
       </div>
     </div>
