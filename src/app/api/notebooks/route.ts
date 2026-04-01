@@ -17,30 +17,30 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    console.log("POST /api/notebooks: Received request");
-
-    // Parse and validate the request body
     const body = await req.json();
-    console.log("POST /api/notebooks: Request body:", body);
+    const { title, description, content } = body;
 
-    const { title, content } = body;
-    if (!title || !content) {
-      console.error("POST /api/notebooks: Validation error - Missing title or content");
-      return NextResponse.json({ error: "Title and content are required." }, { status: 400 });
+    // Manual quick validation before hitting DB
+    if (!title || !description || !content) {
+      return NextResponse.json(
+        { error: "Validation Error", details: "Title, description, and content are required." },
+        { status: 400 }
+      );
     }
 
-    // Connect to the database
-    console.log("POST /api/notebooks: Connecting to database...");
     await dbConnect();
-
-    // Create the notebook
     const notebook = await Notebook.create(body);
-    console.log("POST /api/notebooks: Notebook created:", notebook);
-
     return NextResponse.json(notebook, { status: 201 });
   } catch (error: any) {
     console.error("POST /api/notebooks ERROR:", error);
-    const errorMessage = error instanceof Error ? error.message : error?.message || "Unknown error";
+    
+    // Check if it's a Mongoose validation error
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err: any) => err.message);
+      return NextResponse.json({ error: "Validation Error", details: messages.join(", ") }, { status: 400 });
+    }
+
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred while creating notebook";
     return NextResponse.json({ error: "Failed to create notebook", details: errorMessage }, { status: 500 });
   }
 }

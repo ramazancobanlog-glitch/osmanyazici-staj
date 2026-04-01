@@ -60,7 +60,11 @@ export default function EditNotebook() {
       if (res.ok) {
         router.push("/admin/dashboard");
       } else {
-        alert("Kayıt güncellenemedi!");
+        const errData = await res.json().catch(() => ({}));
+        const errorMessage = errData.details 
+          ? `${errData.error}: ${errData.details}` 
+          : (errData.error || errData.message || res.statusText);
+        alert(`Kayıt güncellenemedi! Hata: ${errorMessage}`);
       }
     } catch (err) {
       alert("Bir hata oluştu.");
